@@ -1,0 +1,306 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              02/19/2023 11:13:15 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          unsigned long int bitMask=0,newKey=0;
+   4          unsigned char tVal;
+   5          unsigned char ticks=0;
+   6          char pulseCnt=0;
+   7                                                                                                                    
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                     
+   8          sbit LED1   = P2^0;
+   9          sbit LED2   = P2^1;
+  10          sbit LED3   = P2^2;
+  11          sbit LED4   = P2^3;
+  12          sbit LED5   = P2^4;
+  13          sbit LED6   = P2^5;
+  14          sbit LED7   = P2^6;
+  15          sbit LED8   = P2^7;
+  16          sbit LED9   = P0^6;
+  17          sbit LED0   = P0^7;
+  18          
+  19          /*
+  20          sbit IN1   = P0^0;
+  21          sbit IN2   = P0^1;
+  22          sbit IN3   = P0^2;
+  23          sbit IN4   = P0^3;
+  24          */
+  25          
+  26          int ledf1 = 0;
+  27          int ledf2 = 0;
+  28          int ledf3 = 0;
+  29          int ledf4 = 0;
+  30          int ledf5 = 0;
+  31          int ledf6 = 0;
+  32          int ledf7 = 0;
+  33          int ledf8 = 0;
+  34          int ledf9 = 0;
+  35          int ledf0 = 0;
+  36          
+  37          //Pin NAME      SCV Code        mp3 code    
+  38          
+  39          #define POWER   0xE31CFF00      //0x1FE48B7     
+  40          #define REPEAT                    0x1FE10EF
+  41          #define MODE                      0x1FE58A7       
+  42          #define MUTE    0xE916FF00      //0x1FE7887
+  43          #define USD                       0x1FE906F
+  44          #define PREV    0xFD02FF00      //0x1FE40BF
+  45          #define NEXT    0xFC03FF00      //0x1FEC03F
+  46          #define EQ                        0x1FE20DF
+  47          #define VOL_M   0xF10EFF00      //0x1FEA05F
+  48          #define VOL_P   0xE51AFF00      //0x1FE609F
+  49          #define PLAY                      0x1FE807F
+  50          #define ZERO    0xED12FF00      //0x1FEE01F
+  51          #define ONE     0xF609FF00      //0x1FE50AF     
+C51 COMPILER V9.60.0.0   MAIN                                                              02/19/2023 11:13:15 PAGE 2   
+
+  52          #define TWO     0xE21DFF00      //0x1FED827     
+  53          #define THREE   0xE01FFF00      //0x1FEF807     
+  54          #define FOUR    0xF20DFF00      //0x1FE30CF
+  55          #define FIVE    0xE619FF00      //0x1FEB04F
+  56          #define SIX     0xE41BFF00      //0x1FE708F
+  57          #define SEVEN   0xEE11FF00      //0x1FE00FF
+  58          #define EIGHT   0xEA15FF00      //0x1FEF00F
+  59          #define NINE    0xE817FF00      //0x1FE9867
+  60          
+  61          
+  62          
+  63          void delay(unsigned int y){
+  64   1          unsigned int i,j;
+  65   1      for(i=0;i<y;i++){
+  66   2          for(j=0;j<1275;j++){}
+  67   2      }
+  68   1      }
+  69          
+  70          void timer0_ISR() interrupt 1
+  71          {
+  72   1          if(ticks<50){
+  73   2              ticks++;
+  74   2          }
+  75   1          
+  76   1          TH0 = 0xFC;   /*Reload Timer Values for 1ms*/
+  77   1          TL0 = 0x67;
+  78   1      }
+  79          
+  80          
+  81          void INT0_ISR()  interrupt 0
+  82          {
+  83   1          tVal = ticks;
+  84   1          ticks = 0;
+  85   1      
+  86   1          TH0 = 0xFC;  /*Reload Timer Values for 1ms*/
+  87   1          TL0 = 0x67;
+  88   1      
+  89   1          pulseCnt++;
+  90   1      
+  91   1          if((tVal>=50)) /*Pulse width greater than 50ms signifies Start of Frame*/
+  92   1          { 
+  93   2              pulseCnt = -2; /*Skip first 2 counts*/
+  94   2              bitMask = 0;
+  95   2          }
+  96   1          else if((pulseCnt>=0) && (pulseCnt<32)) 
+  97   1          {  
+  98   2            /* Accumulate 32 bit data */
+  99   2              if(tVal>=2)            
+ 100   2              {
+ 101   3                  bitMask |=(unsigned long int)1<<(31-pulseCnt);
+ 102   3              }
+ 103   2      
+ 104   2          }
+ 105   1          else if(pulseCnt>=32)          /*End of Frame*/
+ 106   1          {
+ 107   2              newKey = bitMask;      
+ 108   2              pulseCnt = 0;
+ 109   2          }
+ 110   1      }
+ 111          
+ 112          
+ 113          void timerInit (void)
+C51 COMPILER V9.60.0.0   MAIN                                                              02/19/2023 11:13:15 PAGE 3   
+
+ 114          {
+ 115   1          TMOD |= 0x01;  /* Timer 0 Mode 1 */
+ 116   1          TH0 = 0xFC;    /* Reload Value for 1ms for AT89S52*/
+ 117   1          TL0 = 0x67;
+ 118   1          TR0 = 1;       /*Start Timer*/
+ 119   1          ET0 = 1;       /*Enable Timer Interrupt*/
+ 120   1          
+ 121   1          IT0 = 1;       /*Int0 Falling Edge Interrupt*/
+ 122   1          EX0 = 1;       /*Enable INT0 Interrupt*/
+ 123   1          
+ 124   1          EA  = 1;       /*Enable Global Interrupts*/
+ 125   1      }
+ 126          
+ 127          
+ 128          void main()
+ 129          {
+ 130   1      
+ 131   1              
+ 132   1          /*  
+ 133   1              IN1 = 1;
+ 134   1              IN2 = 1;
+ 135   1              IN3 = 1;
+ 136   1              IN4 = 1;
+ 137   1          */    
+ 138   1              LED1 = 0;
+ 139   1              LED2 = 0;
+ 140   1              LED3 = 0;
+ 141   1              LED4 = 0;
+ 142   1              LED5 = 0;
+ 143   1              LED6 = 0; 
+ 144   1              LED7 = 0;
+ 145   1              LED8 = 0;
+ 146   1              LED0 = 0;
+ 147   1        
+ 148   1         timerInit();
+ 149   1        
+ 150   1          while(1)
+ 151   1          {
+ 152   2              if(newKey!=0)   
+ 153   2              {  
+ 154   3                  {if (newKey == ONE){
+ 155   5                    if (ledf1 == 0) { 
+ 156   6                    ledf1 = 1;       
+ 157   6                    LED1 = 1;
+ 158   6                    
+ 159   6                  }else {
+ 160   6                    ledf1 = 0;
+ 161   6                    LED1 = 0;
+ 162   6                    
+ 163   6                  }}}
+ 164   3                  {if (newKey == TWO){
+ 165   5                    if (ledf2 == 0) { 
+ 166   6                    ledf2 = 1;       
+ 167   6                    LED2 = 1;
+ 168   6                    
+ 169   6                  }else {
+ 170   6                    ledf2 = 0;
+ 171   6                    LED2 = 0;
+ 172   6                    
+ 173   6                  }}}
+ 174   3                  {if (newKey == THREE){
+ 175   5                    if (ledf3 == 0) { 
+C51 COMPILER V9.60.0.0   MAIN                                                              02/19/2023 11:13:15 PAGE 4   
+
+ 176   6                    ledf3 = 1;       
+ 177   6                    LED3 = 1;
+ 178   6                    
+ 179   6                  }else {
+ 180   6                    ledf3 = 0;
+ 181   6                    LED3 = 0;
+ 182   6                    
+ 183   6                  }}}
+ 184   3                  {if (newKey == FOUR){
+ 185   5                    if (ledf4 == 0) { 
+ 186   6                    ledf4 = 1;       
+ 187   6                    LED4 = 1;
+ 188   6                    
+ 189   6                  }else {
+ 190   6                    ledf4 = 0;
+ 191   6                    LED4 = 0;
+ 192   6                    
+ 193   6                  }}}
+ 194   3                  {if (newKey == FIVE){
+ 195   5                    if (ledf5 == 0) { 
+ 196   6                    ledf5 = 1;       
+ 197   6                    LED5 = 1;
+ 198   6                    
+ 199   6                  }else {
+ 200   6                    ledf5 = 0;
+ 201   6                    LED5 = 0;
+ 202   6                    
+ 203   6                  }}}
+ 204   3                  {if (newKey == SIX){
+ 205   5                    if (ledf6 == 0) { 
+ 206   6                    ledf6 = 1;       
+ 207   6                    LED6 = 1;
+ 208   6                    
+ 209   6                  }else {
+ 210   6                    ledf6 = 0;
+ 211   6                    LED6 = 0;
+ 212   6                    
+ 213   6                  }}}
+ 214   3                  {if (newKey == SEVEN){
+ 215   5                    if (ledf7 == 0) { 
+ 216   6                    ledf7 = 1;       
+ 217   6                    LED7 = 1;
+ 218   6                    
+ 219   6                  }else {
+ 220   6                    ledf7 = 0;
+ 221   6                    LED7 = 0;
+ 222   6                    
+ 223   6                  }}}
+ 224   3                  {if (newKey == EIGHT){
+ 225   5                    if (ledf8 == 0) { 
+ 226   6                    ledf8 = 1;       
+ 227   6                    LED8 = 1;
+ 228   6                    
+ 229   6                  }else {
+ 230   6                    ledf8 = 0;
+ 231   6                    LED8 = 0;
+ 232   6                    
+ 233   6                  }}}
+ 234   3                  {if (newKey == NINE){
+ 235   5                    if (ledf9 == 0) { 
+ 236   6                    ledf9 = 1;       
+ 237   6                    LED9 = 1;
+C51 COMPILER V9.60.0.0   MAIN                                                              02/19/2023 11:13:15 PAGE 5   
+
+ 238   6                    
+ 239   6                  }else {
+ 240   6                    ledf9 = 0;
+ 241   6                    LED9 = 0;
+ 242   6                    
+ 243   6                  }}}
+ 244   3                  {if (newKey == ZERO){
+ 245   5                    if (ledf0 == 0) { 
+ 246   6                    ledf0 = 1;       
+ 247   6                    LED0 = 1;
+ 248   6                    
+ 249   6                  }else {
+ 250   6                    ledf0 = 0;
+ 251   6                    LED0 = 0;
+ 252   6                    
+ 253   6                  }}}
+ 254   3                if (newKey == POWER){
+ 255   4                  
+ 256   4              LED1 = 0;
+ 257   4              LED2 = 0;
+ 258   4              LED3 = 0;
+ 259   4              LED4 = 0;
+ 260   4              LED5 = 0;
+ 261   4              LED6 = 0; 
+ 262   4              LED7 = 0;
+ 263   4              LED8 = 0;
+ 264   4              LED9 = 0;
+ 265   4              LED0 = 0;
+ 266   4                  }
+ 267   3                      
+ 268   3                  newKey = 0;    
+ 269   3                }
+ 270   2      }   
+ 271   1          }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    802    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     31    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

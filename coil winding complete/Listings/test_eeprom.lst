@@ -1,0 +1,372 @@
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TEST_EEPROM
+OBJECT MODULE PLACED IN .\Objects\test_eeprom.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE test_eeprom.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\test_eeprom.lst) TABS(2) OBJECT(.\Objects\test_eeprom.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <stdio.h> 
+   3          
+   4          sbit RS = P3^6; //Register Select (RS) pin of 16*2 lcd
+   5          sbit EN = P3^7; //Enable (E) pin of 16*2 lcd
+   6          
+   7          sbit SDA = P3^1; //SDA pin of EEPROM
+   8          sbit SCL = P3^0; //SCL pin of EEPROM
+   9          
+  10          sbit button1 = P3^6;
+  11          sbit eepromSwitch = P3^7;
+  12          sbit e2 = P3^4;
+  13          sbit led = P3^5;
+  14          
+  15          /*
+  16          sbit motor=P2^0;
+  17          
+  18          sbit ones=P0^2;
+  19          sbit tens=P0^3;
+  20          sbit huns=P0^4;
+  21          
+  22          sbit start=P0^5;
+  23          sbit stop =P0^6;
+  24          sbit reset=P0^7;
+  25          
+  26          unsigned char msg[]="  Counter  :";
+  27          unsigned char msg2[]="Set count  :";
+  28          unsigned char msg3[]="Count:";
+  29          
+  30          void counter();
+  31          void delay();
+  32          
+  33          void LCD_CMD(unsigned char x); //LCD command function
+  34          void LCD_DATA(char w); //LCD data function
+  35          void LCD_INI(void) ; // LCD initialzed function
+  36          void Send_Data(unsigned char *str); //Send data string
+  37          
+  38          void msDelay(unsigned int); //function for creating delay
+  39          void Delay(unsigned char Time); //£unction for creating delay
+  40          */
+  41          void EPROM_Start(); //EEPROM Start Function
+  42          void EPROM_Stop(); //EEPROM Stop Function
+  43          void EPROM_Ack(); //EEPROM Acknowledge Function
+  44          
+  45          void EPROM_Send(unsigned char Data); //EEPROM Send Data Function
+  46          unsigned char EPROM_Read(); //EEPROM Read Data Function
+  47          
+  48          void EPROM_WriteByte(unsigned char Data, unsigned char Address, unsigned char Page); //WPROM Write Byte
+  49          unsigned char EPROM_ReadByte(unsigned char Address, unsigned char Page); //WPROM Read Byte
+  50          
+  51          unsigned int i;
+  52          
+  53          int k;
+  54          int b;
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 2   
+
+  55          int q;
+  56          
+  57          int val;
+  58          int val2 = 1510;
+  59          int val3 = 0;
+  60          
+  61          char ch[4];
+  62          char eh[4];
+  63          
+  64          void main (void)
+  65          { 
+  66   1        /*
+  67   1          LCD_INI();
+  68   1          TMOD=0x05;                                
+  69   1          counter();
+  70   1        */
+  71   1        while(1){
+  72   2        
+  73   2        if (eepromSwitch == 0){
+  74   3          
+  75   3          for(i = 0; i<5; i++)
+  76   3              {
+  77   4                EPROM_WriteByte(val2,i,0); //Write Data to EEPROM
+  78   4            
+  79   4              }
+  80   3            }
+  81   2          if (e2 == 0){
+  82   3          
+  83   3          for(i = 0; i<5; i++)
+  84   3              {
+  85   4                EPROM_WriteByte(val3,i,0); //Write Data to EEPROM
+  86   4            
+  87   4              }
+  88   3            }
+  89   2        
+  90   2          
+  91   2        
+  92   2      if (button1 == 0){
+  93   3            
+  94   3                  if ((EPROM_ReadByte(i, 0)==1510))
+  95   3                      {
+  96   4                        led = 0;
+  97   4                      }
+  98   3                }
+  99   2          }
+ 100   1      }
+ 101            
+ 102          /* void counter()
+ 103           {
+ 104             TL0=0;                                  
+ 105             TR0=1;
+ 106             
+ 107            while(motor=0); 
+ 108             
+ 109              LCD_CMD(0x80);   
+ 110                
+ 111                for(k=0;k<12;k++)
+ 112                  {
+ 113                    LCD_DATA(msg[k]);
+ 114                  }    
+ 115              
+ 116              LCD_CMD(0xc0);
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 3   
+
+ 117               
+ 118                for(k=0;k<12;k++)
+ 119                  {
+ 120                    LCD_DATA(msg2[k]);
+ 121                  }
+ 122                  
+ 123             while(1)
+ 124               {
+ 125                LCD_CMD(0x8c);                           
+ 126                val=TL0|TH0<<8;                 
+ 127               
+ 128                sprintf(ch,"%u",val);             
+ 129          
+ 130                for(k=0;k<5;k++)
+ 131                  {
+ 132                    LCD_DATA(ch[k]);
+ 133                  }
+ 134                
+ 135                LCD_CMD(0xcc);
+ 136               
+ 137                sprintf(eh,"%u",val2);
+ 138                
+ 139                for (b=0;b<5;b++)
+ 140                  {
+ 141                    LCD_DATA(eh[b]);
+ 142                  }
+ 143                  
+ 144          if (start==0){
+ 145                
+ 146                motor=1;  
+ 147              
+ 148          }
+ 149          if (stop==0){
+ 150                
+ 151                motor=0;  
+ 152              
+ 153          }
+ 154          if (reset==0){
+ 155            
+ 156                val=0; 
+ 157                val2=0;
+ 158          
+ 159          } 
+ 160          
+ 161          if (val>0 && val2==val){
+ 162                
+ 163                motor=0;
+ 164          }
+ 165          if (ones==0){
+ 166            val2 = val2+1;
+ 167            delay();
+ 168          }
+ 169          
+ 170          if (tens==0){
+ 171            val2 = val2+10;
+ 172            delay();
+ 173           }
+ 174          
+ 175          if (huns==0){
+ 176            val2 = val2+100;
+ 177            delay();
+ 178          }
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 4   
+
+ 179          
+ 180          if (button1 == 0){
+ 181              
+ 182                    LCD_CMD(0x01); //lcd clear screen   
+ 183                    
+ 184                    LCD_CMD(0x80);
+ 185                
+ 186              for(q=0;q<6;q++)
+ 187                  {
+ 188                    LCD_DATA(msg3[q]);
+ 189                  }
+ 190                
+ 191                    LCD_CMD(0x87);
+ 192                    
+ 193              for (i = 0; i<5; i++)
+ 194                  {
+ 195                    LCD_DATA(EPROM_ReadByte(i, 0)); //Read Data From EEPROM
+ 196                  }
+ 197                }
+ 198          
+ 199          if (eepromSwitch == 0){
+ 200                
+ 201                sprintf(ch,"%u",val);
+ 202                for(i = 0; i<5; i++)
+ 203                  {
+ 204                    EPROM_WriteByte(ch[i],i,0); //Write Data to EEPROM
+ 205                
+ 206                  }     
+ 207                }
+ 208              } 
+ 209            } 
+ 210          void delay()
+ 211           {
+ 212             int i;
+ 213             for(i=0;i<=30000;i++);                
+ 214           } 
+ 215          
+ 216          void LCD_DATA (char w)
+ 217          {
+ 218            P1 = w; // Put w into LCDD
+ 219            RS = 1; // RS is equal to 1
+ 220            EN = 1; // EN is equal to 1
+ 221            msDelay(1); //Delay
+ 222            EN = 0; //En is equal to 0
+ 223            return; // Return
+ 224          }
+ 225          
+ 226          void LCD_CMD (unsigned char x)
+ 227          {
+ 228            P1 = x; // Put X into LCD
+ 229            RS = 0; // RS is equal to 0
+ 230            EN = 1; // EN is equal to 1
+ 231            msDelay(1); //Delay
+ 232            EN = 0; //En is equal to 0
+ 233            return; // Return
+ 234          }
+ 235          
+ 236          void LCD_INI (void)
+ 237          {
+ 238            LCD_CMD(0x38); //Set Function 00111000
+ 239            LCD_CMD(0x0c); //Set Display On/Off 00001110
+ 240          }
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 5   
+
+ 241          
+ 242          void msDelay(unsigned int Time)
+ 243          {
+ 244            unsigned int y,z; //Define variable
+ 245            for (y=0; y<Time; y++) // For Loop for delay
+ 246            for (z=0; z<500; z++); //For Loop for delay
+ 247          }
+ 248          */
+ 249          void Delay (unsigned char Time)
+ 250          {
+ 251   1        unsigned char y; //Define variable
+ 252   1        for (y=0; y<Time; y++); // For Loop for delay
+ 253   1      }
+ 254          
+ 255          void EPROM_Start()
+ 256          {
+ 257   1        SCL = 0; // SCL Iis equal to 0
+ 258   1        SDA = 1; // SDA is equal to 1
+ 259   1        Delay(30); //Delay
+ 260   1        SCL = 1; // SCL is equal to 1
+ 261   1        Delay(30); //DElay
+ 262   1        SDA =0; // SDA is equal to 0
+ 263   1        Delay(30); //Delay
+ 264   1        SCL = 0; // SCL is equal to 0
+ 265   1      }
+ 266          
+ 267          void EPROM_Stop()
+ 268          {
+ 269   1        SCL = 0; // SCL is equal to 0
+ 270   1        Delay(30); //Delay
+ 271   1        SDA = 0; // SDA is equal to 0
+ 272   1        Delay(30); //Delay
+ 273   1        SCL = 1; // SCL is equal to 1
+ 274   1        Delay(30); //Delay
+ 275   1        SDA = 1; // SDA is equal to 1
+ 276   1      }
+ 277          
+ 278          void EPROM_Ack()
+ 279          {
+ 280   1        SDA = 0; // SDA is equal to 0
+ 281   1        Delay(30); //Delay
+ 282   1        SCL = 1; // SCL is equal to 1
+ 283   1        Delay(30); //Delay
+ 284   1        SCL = 0; // SCL is equal to 0
+ 285   1        SDA = 1; // SDA is equal to 1
+ 286   1      }
+ 287          
+ 288          void EPROM_Send(unsigned char Data)
+ 289          {
+ 290   1        unsigned char i; //Define variable
+ 291   1        for (i = 0; i< 8; i++) //For loop for sending data bit by bit
+ 292   1        {
+ 293   2          SDA = Data & 0x80; //AND operation with 10000000
+ 294   2          SCL = 1; // SCL is equal to 1
+ 295   2          SCL = 0; // SCL is equal to 0
+ 296   2          Data<<=1; //Shift Data with 1
+ 297   2        }
+ 298   1          EPROM_Ack(); //Call EEPROM Acknowledge
+ 299   1      }
+ 300          unsigned char EPROM_Read()
+ 301          {
+ 302   1        unsigned char i, Data = 0; //Define variable
+C51 COMPILER V9.60.0.0   TEST_EEPROM                                                       04/30/2021 12:16:37 PAGE 6   
+
+ 303   1        for (i = 0; i < 8; i++) //For loop
+ 304   1        {
+ 305   2          Delay(20); //Delay
+ 306   2          SCL = 1; // SCL is equal to 1
+ 307   2          Data |= SDA; //Add Data into data
+ 308   2          if(i<7)
+ 309   2          Data<<=1; //Shift data with 1
+ 310   2          SCL = 0; // SCL is equal to 0
+ 311   2        }
+ 312   1        return Data; //Return data
+ 313   1      }
+ 314          
+ 315          void EPROM_WriteByte (unsigned char Data, unsigned char Address, unsigned char Page)
+ 316          {
+ 317   1        EPROM_Start(); // Call start
+ 318   1        EPROM_Send(0xA0 | (Page<<1)); // Send page number
+ 319   1        EPROM_Send(Address); //Send address loaction
+ 320   1        EPROM_Send(Data); //Send Data
+ 321   1        EPROM_Stop(); //Call stop
+ 322   1        Delay(10); //Delay
+ 323   1      }
+ 324          
+ 325          unsigned char EPROM_ReadByte(unsigned char Address, unsigned char Page)
+ 326          {
+ 327   1        unsigned char Data;
+ 328   1      
+ 329   1          EPROM_Start(); //Call staret
+ 330   1          EPROM_Send(0xA0 | (Page<<1));// Send page number
+ 331   1          EPROM_Send(Address); //Send address location
+ 332   1          EPROM_Start(); //Call start
+ 333   1          EPROM_Send(0xA1 | (Page<<1)); //Send page number
+ 334   1          Data = EPROM_Read(); //Read Data
+ 335   1          EPROM_Stop(); // Call Stop
+ 336   1          Delay(5); //Delay
+ 337   1          return Data;
+ 338   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    305    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

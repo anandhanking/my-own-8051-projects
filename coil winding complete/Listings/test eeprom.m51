@@ -1,0 +1,283 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    04/30/2021  12:16:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\test_eeprom.obj TO .\Objects\test eeprom PRINT (.\Listings\test eeprom.m51) CODE (
+>> 0X0000-0X0FFF)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\test_eeprom.obj (TEST_EEPROM)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\test eeprom (TEST_EEPROM)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0016H     UNIT         ?DT?TEST_EEPROM
+            IDATA   001EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     005AH     UNIT         ?PR?MAIN?TEST_EEPROM
+            CODE    08E6H     0030H     UNIT         ?PR?EPROM_READ?TEST_EEPROM
+            CODE    0916H     002FH     UNIT         ?PR?_EPROM_READBYTE?TEST_EEPROM
+            CODE    0945H     0020H     UNIT         ?PR?_EPROM_WRITEBYTE?TEST_EEPROM
+            CODE    0965H     001EH     UNIT         ?PR?_EPROM_SEND?TEST_EEPROM
+            CODE    0983H     0012H     UNIT         ?PR?_DELAY?TEST_EEPROM
+            CODE    0995H     000FH     UNIT         ?PR?EPROM_START?TEST_EEPROM
+            CODE    09A4H     000FH     UNIT         ?PR?EPROM_STOP?TEST_EEPROM
+            CODE    09B3H     000AH     UNIT         ?PR?EPROM_ACK?TEST_EEPROM
+            CODE    09BDH     0009H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\test eeprom (TEST_EEPROM)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?TEST_EEPROM
+  +--> ?C_INITSEG
+
+?PR?MAIN?TEST_EEPROM
+  +--> ?PR?_EPROM_WRITEBYTE?TEST_EEPROM
+  +--> ?PR?_EPROM_READBYTE?TEST_EEPROM
+
+?PR?_EPROM_WRITEBYTE?TEST_EEPROM
+  +--> ?PR?EPROM_START?TEST_EEPROM
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/30/2021  12:16:39  PAGE 2
+
+
+  +--> ?PR?_EPROM_SEND?TEST_EEPROM
+  +--> ?PR?EPROM_STOP?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+?PR?EPROM_START?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+?PR?_EPROM_SEND?TEST_EEPROM
+  +--> ?PR?EPROM_ACK?TEST_EEPROM
+
+?PR?EPROM_ACK?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+?PR?EPROM_STOP?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+?PR?_EPROM_READBYTE?TEST_EEPROM
+  +--> ?PR?EPROM_START?TEST_EEPROM
+  +--> ?PR?_EPROM_SEND?TEST_EEPROM
+  +--> ?PR?EPROM_READ?TEST_EEPROM
+  +--> ?PR?EPROM_STOP?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+?PR?EPROM_READ?TEST_EEPROM
+  +--> ?PR?_DELAY?TEST_EEPROM
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\test eeprom (TEST_EEPROM)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TEST_EEPROM
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00B0H.7       PUBLIC        eepromSwitch
+  D:00B0H         PUBLIC        P3
+  C:0945H         PUBLIC        _EPROM_WriteByte
+  C:09A4H         PUBLIC        EPROM_Stop
+  B:00B0H.4       PUBLIC        e2
+  C:088CH         PUBLIC        main
+  B:00B0H.5       PUBLIC        led
+  D:0008H         PUBLIC        val
+  D:000AH         PUBLIC        ch
+  D:000EH         PUBLIC        eh
+  B:00B0H.6       PUBLIC        button1
+  B:00B0H.1       PUBLIC        SDA
+  D:0012H         PUBLIC        b
+  B:00B0H.0       PUBLIC        SCL
+  C:08E6H         PUBLIC        EPROM_Read
+  D:0014H         PUBLIC        i
+  D:0016H         PUBLIC        k
+  D:0018H         PUBLIC        q
+  C:098AH         PUBLIC        _Delay
+  C:0965H         PUBLIC        _EPROM_Send
+  C:09B3H         PUBLIC        EPROM_Ack
+  D:001AH         PUBLIC        val2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/30/2021  12:16:39  PAGE 3
+
+
+  C:0995H         PUBLIC        EPROM_Start
+  D:001CH         PUBLIC        val3
+  C:0916H         PUBLIC        _EPROM_ReadByte
+  -------         PROC          MAIN
+  C:088CH         LINE#         64
+  C:088CH         LINE#         65
+  C:088CH         LINE#         71
+  C:088CH         LINE#         73
+  C:088FH         LINE#         75
+  C:0894H         LINE#         76
+  C:0894H         LINE#         77
+  C:089DH         LINE#         79
+  C:08AEH         LINE#         80
+  C:08AEH         LINE#         81
+  C:08B1H         LINE#         83
+  C:08B6H         LINE#         84
+  C:08B6H         LINE#         85
+  C:08BFH         LINE#         87
+  C:08D0H         LINE#         88
+  C:08D0H         LINE#         92
+  C:08D3H         LINE#         94
+  C:08E2H         LINE#         95
+  C:08E2H         LINE#         96
+  C:08E4H         LINE#         97
+  C:08E4H         LINE#         98
+  C:08E4H         LINE#         99
+  -------         ENDPROC       MAIN
+  C:0985H         SYMBOL        L?0035
+  -------         PROC          L?0034
+  -------         ENDPROC       L?0034
+  C:0985H         SYMBOL        L?0035
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        Time
+  -------         DO            
+  D:0006H         SYMBOL        y
+  -------         ENDDO         
+  C:098AH         LINE#         249
+  C:098AH         LINE#         250
+  C:098AH         LINE#         252
+  C:0994H         LINE#         253
+  -------         ENDPROC       _DELAY
+  -------         PROC          EPROM_START
+  C:0995H         LINE#         255
+  C:0995H         LINE#         256
+  C:0995H         LINE#         257
+  C:0997H         LINE#         258
+  C:0999H         LINE#         259
+  C:0999H         LINE#         260
+  C:0999H         LINE#         261
+  C:099CH         LINE#         262
+  C:099EH         LINE#         263
+  C:09A1H         LINE#         264
+  C:09A3H         LINE#         265
+  -------         ENDPROC       EPROM_START
+  -------         PROC          EPROM_STOP
+  C:09A4H         LINE#         267
+  C:09A4H         LINE#         268
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/30/2021  12:16:39  PAGE 4
+
+
+  C:09A4H         LINE#         269
+  C:09A6H         LINE#         270
+  C:09ABH         LINE#         271
+  C:09ADH         LINE#         272
+  C:09ADH         LINE#         273
+  C:09ADH         LINE#         274
+  C:09B0H         LINE#         275
+  C:09B2H         LINE#         276
+  -------         ENDPROC       EPROM_STOP
+  -------         PROC          EPROM_ACK
+  C:09B3H         LINE#         278
+  C:09B3H         LINE#         279
+  C:09B3H         LINE#         280
+  C:09B5H         LINE#         281
+  C:09B5H         LINE#         282
+  C:09B5H         LINE#         283
+  C:09B8H         LINE#         284
+  C:09BAH         LINE#         285
+  C:09BCH         LINE#         286
+  -------         ENDPROC       EPROM_ACK
+  -------         PROC          _EPROM_SEND
+  D:0007H         SYMBOL        Data
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0965H         LINE#         288
+  C:0965H         LINE#         289
+  C:0965H         LINE#         291
+  C:0971H         LINE#         292
+  C:0971H         LINE#         293
+  C:0975H         LINE#         294
+  C:0977H         LINE#         295
+  C:0979H         LINE#         296
+  C:097DH         LINE#         297
+  C:0980H         LINE#         298
+  -------         ENDPROC       _EPROM_SEND
+  -------         PROC          EPROM_READ
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0005H         SYMBOL        Data
+  -------         ENDDO         
+  C:08E6H         LINE#         300
+  C:08E6H         LINE#         301
+  C:08E6H         LINE#         302
+  C:08E8H         LINE#         303
+  C:08F3H         LINE#         304
+  C:08F3H         LINE#         305
+  C:08F8H         LINE#         306
+  C:08FAH         LINE#         307
+  C:0900H         LINE#         308
+  C:090AH         LINE#         309
+  C:090EH         LINE#         310
+  C:0910H         LINE#         311
+  C:0913H         LINE#         312
+  C:0915H         LINE#         313
+  -------         ENDPROC       EPROM_READ
+  -------         PROC          _EPROM_WRITEBYTE
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  04/30/2021  12:16:39  PAGE 5
+
+
+  D:0004H         SYMBOL        Data
+  D:0005H         SYMBOL        Address
+  D:0003H         SYMBOL        Page
+  C:0945H         LINE#         315
+  C:0947H         LINE#         316
+  C:0947H         LINE#         317
+  C:094AH         LINE#         318
+  C:0953H         LINE#         319
+  C:0958H         LINE#         320
+  C:095DH         LINE#         321
+  C:0960H         LINE#         322
+  -------         ENDPROC       _EPROM_WRITEBYTE
+  -------         PROC          _EPROM_READBYTE
+  D:0004H         SYMBOL        Address
+  D:0005H         SYMBOL        Page
+  -------         DO            
+  D:0005H         SYMBOL        Data
+  -------         ENDDO         
+  C:0916H         LINE#         325
+  C:0918H         LINE#         326
+  C:0918H         LINE#         329
+  C:091BH         LINE#         330
+  C:0924H         LINE#         331
+  C:0929H         LINE#         332
+  C:092CH         LINE#         333
+  C:0935H         LINE#         334
+  C:093AH         LINE#         335
+  C:093DH         LINE#         336
+  C:0942H         LINE#         337
+  C:0944H         LINE#         338
+  -------         ENDPROC       _EPROM_READBYTE
+  -------         ENDMOD        TEST_EEPROM
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0139H BYTE (15%) *
+******************************************************************************
+
+Program Size: data=31.0 xdata=0 code=457
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

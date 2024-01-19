@@ -1,0 +1,3 @@
+".\Objects\ir.obj" 
+TO ".\Objects\ir_lcd" 
+PRINT(".\Listings\ir_lcd.m51") CODE( 0X0000-0X0FFF )

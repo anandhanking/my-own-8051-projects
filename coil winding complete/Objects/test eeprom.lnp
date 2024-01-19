@@ -1,0 +1,3 @@
+".\Objects\test_eeprom.obj" 
+TO ".\Objects\test eeprom" 
+PRINT(".\Listings\test eeprom.m51") CODE( 0X0000-0X0FFF )

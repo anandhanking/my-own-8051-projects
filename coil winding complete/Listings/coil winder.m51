@@ -1,0 +1,264 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    03/28/2021  11:12:30  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\coil winder.obj TO .\Objects\coil winder PRINT (.\Listings\coil winder.m51) RAMSIZ
+>> E (256) CODE (0X0000-0X1FFF)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\coil winder.obj (COIL_WINDER)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (PRINTF)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?PLDIIDATA)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CCASE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (PUTCHAR)
+
+
+LINK MAP OF MODULE:  .\Objects\coil winder (COIL_WINDER)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0014H     UNIT         _DATA_GROUP_
+                    001CH     0004H                  *** GAP ***
+            BIT     0020H.0   0001H.1   UNIT         _BIT_GROUP_
+                    0021H.1   0000H.7                *** GAP ***
+            DATA    0022H     002AH     UNIT         ?DT?COIL_WINDER
+            IDATA   004CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     035CH     UNIT         ?PR?PRINTF?PRINTF
+            CODE    0B5CH     011CH     UNIT         ?PR?COUNTER?COIL_WINDER
+            CODE    0C78H     008EH     UNIT         ?C?LIB_CODE
+            CODE    0D06H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0D92H     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    0DB9H     0023H     UNIT         ?C_INITSEG
+            CODE    0DDCH     001EH     UNIT         ?PR?MAIN?COIL_WINDER
+            CODE    0DFAH     001BH     UNIT         ?PR?_LCD?COIL_WINDER
+            CODE    0E15H     000FH     UNIT         ?PR?DELAY?COIL_WINDER
+            CODE    0E24H     0003H     UNIT         ?CO?COIL_WINDER
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\coil winder (COIL_WINDER)
+
+
+SEGMENT                            BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT           START    LENGTH     START    LENGTH
+-------------------------------------------------------------------
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/28/2021  11:12:30  PAGE 2
+
+
+?C_C51STARTUP                   -----    -----      -----    -----
+  +--> ?PR?MAIN?COIL_WINDER
+  +--> ?C_INITSEG
+
+?PR?MAIN?COIL_WINDER            -----    -----      -----    -----
+  +--> ?PR?_LCD?COIL_WINDER
+  +--> ?PR?COUNTER?COIL_WINDER
+
+?PR?_LCD?COIL_WINDER            -----    -----      -----    -----
+  +--> ?PR?DELAY?COIL_WINDER
+
+?PR?COUNTER?COIL_WINDER         -----    -----      -----    -----
+  +--> ?PR?_LCD?COIL_WINDER
+  +--> ?CO?COIL_WINDER
+  +--> ?PR?PRINTF?PRINTF
+
+?PR?PRINTF?PRINTF               0020H.0  0001H.1    0008H    0014H
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\coil winder (COIL_WINDER)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        COIL_WINDER
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0B5CH         PUBLIC        counter
+  D:00A8H         PUBLIC        IE
+  C:0E15H         PUBLIC        delay
+  D:00B8H         PUBLIC        IP
+  C:0DDCH         PUBLIC        main
+  B:0080H.0       PUBLIC        start
+  C:0E03H         PUBLIC        _lcd
+  B:00B0H.1       PUBLIC        motor
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:0080H.2       PUBLIC        ones
+  B:0080H.3       PUBLIC        tens
+  B:0080H.1       PUBLIC        huns
+  D:0022H         PUBLIC        val
+  D:0024H         PUBLIC        msg
+  B:0080H.6       PUBLIC        stop
+  D:0031H         PUBLIC        ch
+  D:008CH         PUBLIC        TH0
+  D:0035H         PUBLIC        eh
+  D:008AH         PUBLIC        TL0
+  B:0080H.4       PUBLIC        en
+  B:0088H.4       PUBLIC        TR0
+  D:0039H         PUBLIC        b
+  B:0080H.5       PUBLIC        rs
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/28/2021  11:12:30  PAGE 3
+
+
+  D:00C8H         PUBLIC        T2CON
+  D:003BH         PUBLIC        k
+  D:003DH         PUBLIC        val2
+  D:003FH         PUBLIC        msg2
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:0DDCH         LINE#         31
+  C:0DDCH         LINE#         32
+  C:0DDCH         LINE#         33
+  C:0DE4H         LINE#         34
+  C:0DECH         LINE#         35
+  C:0DF4H         LINE#         36
+  C:0DF7H         LINE#         37
+  -------         ENDPROC       MAIN
+  -------         PROC          DELAY
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0E15H         LINE#         39
+  C:0E15H         LINE#         40
+  C:0E15H         LINE#         42
+  C:0E23H         LINE#         43
+  -------         ENDPROC       DELAY
+  -------         PROC          COUNTER
+  C:0B5CH         LINE#         44
+  C:0B5CH         LINE#         45
+  C:0B5CH         LINE#         46
+  C:0B5FH         LINE#         47
+  C:0B61H         LINE#         49
+  C:0B64H         LINE#         50
+  C:0B68H         LINE#         51
+  C:0B68H         LINE#         52
+  C:0B6DH         LINE#         53
+  C:0B80H         LINE#         55
+  C:0B88H         LINE#         56
+  C:0B8DH         LINE#         57
+  C:0B8DH         LINE#         58
+  C:0B92H         LINE#         59
+  C:0BA5H         LINE#         61
+  C:0BA5H         LINE#         62
+  C:0BA5H         LINE#         63
+  C:0BADH         LINE#         64
+  C:0BB7H         LINE#         65
+  C:0BCEH         LINE#         66
+  C:0BD3H         LINE#         67
+  C:0BD3H         LINE#         68
+  C:0BD8H         LINE#         69
+  C:0BEBH         LINE#         71
+  C:0BF3H         LINE#         72
+  C:0C0BH         LINE#         73
+  C:0C10H         LINE#         74
+  C:0C10H         LINE#         75
+  C:0C17H         LINE#         76
+  C:0C2AH         LINE#         80
+  C:0C2DH         LINE#         82
+  C:0C2FH         LINE#         84
+  C:0C2FH         LINE#         85
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/28/2021  11:12:30  PAGE 4
+
+
+  C:0C32H         LINE#         87
+  C:0C34H         LINE#         89
+  C:0C34H         LINE#         91
+  C:0C49H         LINE#         93
+  C:0C4BH         LINE#         94
+  C:0C4BH         LINE#         95
+  C:0C4EH         LINE#         96
+  C:0C56H         LINE#         97
+  C:0C56H         LINE#         98
+  C:0C59H         LINE#         99
+  C:0C64H         LINE#         100
+  C:0C64H         LINE#         101
+  C:0C6AH         LINE#         102
+  C:0C75H         LINE#         103
+  C:0C75H         LINE#         104
+  -------         ENDPROC       COUNTER
+  C:0DFAH         SYMBOL        L?0038
+  C:0DFCH         SYMBOL        L?0039
+  -------         PROC          L?0037
+  -------         ENDPROC       L?0037
+  C:0DFAH         SYMBOL        L?0038
+  C:0DFCH         SYMBOL        L?0039
+  -------         PROC          _LCD
+  D:0007H         SYMBOL        a
+  D:0004H         SYMBOL        b
+  C:0E03H         LINE#         106
+  C:0E03H         LINE#         107
+  C:0E03H         LINE#         108
+  C:0E05H         LINE#         109
+  C:0E0BH         LINE#         110
+  C:0E0DH         LINE#         111
+  C:0E10H         LINE#         112
+  C:0E12H         LINE#         113
+  -------         ENDPROC       _LCD
+  -------         ENDMOD        COIL_WINDER
+
+  -------         MODULE        PRINTF
+  D:0008H         PUBLIC        ?_PRINTF517?BYTE
+  D:0008H         PUBLIC        ?_PRINTF?BYTE
+  D:0008H         PUBLIC        ?_SPRINTF517?BYTE
+  D:0008H         PUBLIC        ?_SPRINTF?BYTE
+  C:0862H         PUBLIC        _PRINTF
+  C:0862H         PUBLIC        _PRINTF517
+  C:085CH         PUBLIC        _SPRINTF
+  C:085CH         PUBLIC        _SPRINTF517
+  -------         ENDMOD        PRINTF
+
+  -------         MODULE        ?C?CLDPTR
+  C:0C78H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0C91H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:0CBEH         PUBLIC        ?C?CSTPTR
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  03/28/2021  11:12:30  PAGE 5
+
+
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?PLDIIDATA
+  C:0CD0H         PUBLIC        ?C?PLDIIDATA
+  -------         ENDMOD        ?C?PLDIIDATA
+
+  -------         MODULE        ?C?CCASE
+  C:0CE0H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+  -------         MODULE        PUTCHAR
+  C:0D92H         PUBLIC        _PUTCHAR
+  -------         ENDMOD        PUTCHAR
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0189H BYTE (19%) *
+******************************************************************************
+
+Program Size: data=72.1 xdata=0 code=1578
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

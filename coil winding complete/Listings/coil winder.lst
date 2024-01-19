@@ -1,0 +1,154 @@
+C51 COMPILER V9.60.0.0   COIL_WINDER                                                       04/11/2021 15:01:39 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE COIL_WINDER
+OBJECT MODULE PLACED IN .\Objects\coil winder.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE coil winder.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\coil winder.lst) TABS(2) OBJECT(.\Objects\coil winder.obj)
+
+line level    source
+
+   1          #include <REGX51.H>
+   2          #include <stdio.h> 
+   3          
+   4          sbit rs=P3^6;
+   5          sbit en=P3^7;
+   6          
+   7          sbit sen1=P3^4;
+   8          sbit motor=P3^1;
+   9          
+  10          sbit ones=P0^2;
+  11          sbit tens=P0^3;
+  12          sbit huns=P0^4;
+  13          
+  14          sbit start=P0^5;
+  15          sbit stop =P0^6;
+  16          sbit reset=P0^7;
+  17          
+  18          void lcd(char a,int b);                        
+  19          unsigned char msg[]="  Counter  :";
+  20          unsigned char msg2[]="Set count  :";
+  21          
+  22          char ch[4];
+  23          char eh[4];
+  24          
+  25          void delay();                                    
+  26          void counter();                               
+  27          int k;
+  28          int b;
+  29          int val2=0;
+  30          unsigned int val;
+  31          
+  32          void main()
+  33           {
+  34   1         lcd(0x38,0);
+  35   1         lcd(0x0c,0);
+  36   1         lcd(0x80,0);
+  37   1         TMOD=0x05;                                
+  38   1         counter();
+  39   1       }
+  40          void delay()
+  41           {
+  42   1         int i;
+  43   1         for(i=0;i<=2000;i++);                
+  44   1       } 
+  45          void counter()
+  46           {
+  47   1         TL0=0;                                  
+  48   1         TR0=1;
+  49   1      
+  50   1        while(motor=0);  
+*** WARNING C276 IN LINE 50 OF coil winder.c: constant in condition expression
+  51   1         for(k=0;k<12;k++)
+  52   1           {
+  53   2             lcd(msg[k],1);
+C51 COMPILER V9.60.0.0   COIL_WINDER                                                       04/11/2021 15:01:39 PAGE 2   
+
+  54   2           }
+  55   1           
+  56   1             lcd(0xc0,0);
+  57   1              for(k=0;k<12;k++)
+  58   1           {
+  59   2             lcd(msg2[k],1);
+  60   2           }
+  61   1           
+  62   1         while(1)
+  63   1           {
+  64   2            lcd(0x8c,0);                           
+  65   2            val=TL0|TH0<<8;                 
+  66   2            sprintf(ch,"%u",val);             
+  67   2            for(k=0;k<5;k++)
+  68   2              {
+  69   3                lcd(ch[k],1);
+  70   3              }
+  71   2            
+  72   2           lcd(0xcc,0);
+  73   2           sprintf(eh,"%u",val2);
+  74   2           for (b=0;b<5;b++)
+  75   2           {
+  76   3              lcd(eh[b],1);
+  77   3           }
+  78   2           
+  79   2      
+  80   2              
+  81   2      if (start==0){
+  82   3            
+  83   3            motor=1;  
+  84   3          
+  85   3      }
+  86   2      if (stop==0){
+  87   3            
+  88   3            motor=0;  
+  89   3          
+  90   3      }
+  91   2      if (reset==0){
+  92   3        
+  93   3            val=0; 
+  94   3            val2=0;
+  95   3      
+  96   3      } 
+  97   2      
+  98   2      if (val>0 && val2==val){
+  99   3            
+ 100   3            motor=0;
+ 101   3      }
+ 102   2      if (ones==0){
+ 103   3        val2 = val2+1;
+ 104   3      }
+ 105   2      
+ 106   2      if (tens==0){
+ 107   3        val2 = val2+10; 
+ 108   3       }
+ 109   2      
+ 110   2      if (huns==0){
+ 111   3        val2 = val2+100;
+ 112   3      }
+ 113   2      }
+ 114   1       } 
+ 115          
+C51 COMPILER V9.60.0.0   COIL_WINDER                                                       04/11/2021 15:01:39 PAGE 3   
+
+ 116          void lcd(char a,int b)
+ 117             {
+ 118   1           P1=a;
+ 119   1           rs=b;
+ 120   1           en=1;
+ 121   1           delay();
+ 122   1           en=0;
+ 123   1           delay();
+ 124   1         }
+ 125            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    368    ----
+   CONSTANT SIZE    =      3    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     42    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
